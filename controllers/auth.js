@@ -32,7 +32,8 @@ exports.register= async(req,res,next) => {
 //@route    POST /api/v1/auth/login
 //@access   Public
 exports.login=async (req,res,next)=>{
-    const {email, password}= req.body;
+    try{
+        const {email, password}= req.body;
 
     //Validate email and password
     if(!email || !password){
@@ -55,6 +56,10 @@ exports.login=async (req,res,next)=>{
     // const token=user.getSignedJwtToken();
     // res.status(200).json({success:true,token});
     sendTokenResponse(user,200,res);
+    }catch(err){
+        return res.status(401).json({success:false, msg:'Cannot convert email or password to string'})
+    }
+    
 }
 
 const sendTokenResponse=(user, statusCode, res)=>{
